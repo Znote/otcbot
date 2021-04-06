@@ -26,7 +26,7 @@ function init()
 	player = g_game.getLocalPlayer()
 	waypointList = luniaBotWindow.waypoints
 	luniaBotWindow:hide()  
-	luniaBotButton = modules.client_topmenu.addLeftGameButton('luniaBotButton', tr('LuniaBot'), '/otcbot-master/luniabot', toggle)
+	luniaBotButton = modules.client_topmenu.addLeftGameButton('luniaBotButton', tr('LuniaBot'), 'icon', toggle)
 	atkButton = luniaBotWindow.autoAttack
 	walkButton = luniaBotWindow.walking
 	healthSpellButton = luniaBotWindow.AutoHealSpell	
@@ -445,3 +445,4 @@ function atkSpellLoop()
 	end
 	atkSpellLoopId = scheduleEvent(atkSpellLoop, 502)
 end
+

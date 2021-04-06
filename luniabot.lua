@@ -1,5 +1,5 @@
-local defaultOptions = {
-	enableAudio = false,	
+local config = {
+	waypointDirectory = "mods/otcbot/waypoints/",
 }
 
 local walkEvent = nil
@@ -21,39 +21,45 @@ local shieldLoopId = nil
 local player = nil
 local healingItem 
 local manaItem
+
+
 function init()
 	luniaBotWindow = g_ui.displayUI('luniabot')
 	player = g_game.getLocalPlayer()
-	waypointList = luniaBotWindow.waypoints
-	luniaBotWindow:hide()  
+	waypointList = luniaBotWindow:getChildById("waypoints")
+	luniaBotWindow:hide()
 	luniaBotButton = modules.client_topmenu.addLeftGameButton('luniaBotButton', tr('LuniaBot'), 'icon', toggle)
-	atkButton = luniaBotWindow.autoAttack
-	walkButton = luniaBotWindow.walking
-	healthSpellButton = luniaBotWindow.AutoHealSpell	
-	healthItemButton = luniaBotWindow.AutoHealItem
-	manaRestoreButton = luniaBotWindow.AutoMana
-	atkSpellButton = luniaBotWindow.AtkSpell
-	manaTrainButton = luniaBotWindow.ManaTrain
-	hasteButton = luniaBotWindow.AutoHaste
-	buffButton = luniaBotWindow.AutoBuff
-	lureButton = luniaBotWindow.LureMonsters
-	manaShieldButton = luniaBotWindow.AutoManaShield
+
+	atkButton = luniaBotWindow:getChildById("autoAttack")
+	walkButton = luniaBotWindow:getChildById("walking")
+	healthSpellButton = luniaBotWindow:getChildById("AutoHealSpell")
+	healthItemButton = luniaBotWindow:getChildById("AutoHealItem")
+	manaRestoreButton = luniaBotWindow:getChildById("AutoMana")
+	atkSpellButton = luniaBotWindow:getChildById("AtkSpell")
+	manaTrainButton = luniaBotWindow:getChildById("ManaTrain")
+	hasteButton = luniaBotWindow:getChildById("AutoHaste")
+	buffButton = luniaBotWindow:getChildById("AutoBuff")
+	lureButton = luniaBotWindow:getChildById("LureMonsters")
+	manaShieldButton = luniaBotWindow:getChildById("AutoManaShield")
+
 	healthItemButton.onCheckChange = autoHealPotion
 	manaRestoreButton.onCheckChange = autoManaPotion
-	luniaBotWindow.AtkSpellText.onTextChange = saveBotText
-	luniaBotWindow.HealSpellText.onTextChange = saveBotText
-	luniaBotWindow.HealthSpellPercent.onTextChange = saveBotText
-	luniaBotWindow.HealItem.onTextChange = saveBotText
-	luniaBotWindow.HealItemPercent.onTextChange = saveBotText
-	luniaBotWindow.ManaItem.onTextChange = saveBotText
-	luniaBotWindow.ManaPercent.onTextChange = saveBotText
-	luniaBotWindow.WptName.onTextChange = saveBotText
-	luniaBotWindow.ManaSpellText.onTextChange = saveBotText
-	luniaBotWindow.ManaTrainPercent.onTextChange = saveBotText
-	luniaBotWindow.HasteText.onTextChange = saveBotText
-	luniaBotWindow.BuffText.onTextChange = saveBotText
-	luniaBotWindow.LureMinimum.onTextChange = saveBotText
-	luniaBotWindow.LureMaximum.onTextChange = saveBotText
+
+	luniaBotWindow:getChildById("AtkSpellText").onTextChange = saveBotText
+	luniaBotWindow:getChildById("HealSpellText").onTextChange = saveBotText
+	luniaBotWindow:getChildById("HealthSpellPercent").onTextChange = saveBotText
+	luniaBotWindow:getChildById("HealItem").onTextChange = saveBotText
+	luniaBotWindow:getChildById("HealItemPercent").onTextChange = saveBotText
+	luniaBotWindow:getChildById("ManaItem").onTextChange = saveBotText
+	luniaBotWindow:getChildById("ManaPercent").onTextChange = saveBotText
+	luniaBotWindow:getChildById("WptName").onTextChange = saveBotText
+	luniaBotWindow:getChildById("ManaSpellText").onTextChange = saveBotText
+	luniaBotWindow:getChildById("ManaTrainPercent").onTextChange = saveBotText
+	luniaBotWindow:getChildById("HasteText").onTextChange = saveBotText
+	luniaBotWindow:getChildById("BuffText").onTextChange = saveBotText
+	luniaBotWindow:getChildById("LureMinimum").onTextChange = saveBotText
+	luniaBotWindow:getChildById("LureMaximum").onTextChange = saveBotText
+
 	connect(g_game, { onGameStart = logIn})
 end
 
@@ -63,16 +69,15 @@ function saveBotText()
 end
 
 
-
 function logIn()
 	player = g_game.getLocalPlayer()
 
 		--Fixes default values
-	if(luniaBotWindow.HealItem:getText()) == ",266" then
-		luniaBotWindow.HealItem:setText('266')
+	if(luniaBotWindow:getChildById("HealItem"):getText()) == ",266" then
+		luniaBotWindow:getChildById("HealItem"):setText('266')
 	end
-	if(luniaBotWindow.ManaItem:getText()) == ",268" then
-		luniaBotWindow.ManaItem:setText('268')
+	if(luniaBotWindow:getChildById("ManaItem"):getText()) == ",268" then
+		luniaBotWindow:getChildById("ManaItem"):setText('268')
 	end
 
 	local checkButtons = {atkButton, healthSpellButton, walkButton, healthItemButton, manaRestoreButton, atkSpellButton, manaTrainButton, hasteButton, manaShieldButton, buffButton, lureButton}
@@ -90,19 +95,21 @@ function logIn()
 end
 
 
-
 function terminate()
 	luniaBotWindow:destroy()
 	luniaBotButton:destroy()
 end
 
+
 function disable()
 	luniaBotButton:hide()
 end
 
+
 function hide()
 	luniaBotWindow:hide()
 end
+
 
 function show()
 	luniaBotWindow:show()
@@ -139,6 +146,7 @@ function toggleLoop(key)
 	end
 end
 
+
 function autoHealPotion()
 	healingItem = healthItemButton:isChecked()
 	g_settings.set(player:getName() .. " " .. healthItemButton:getId(), healthItemButton:isChecked())
@@ -150,6 +158,7 @@ function autoHealPotion()
 		itemHealingLoopId = nil
 	end
 end
+
 
 function autoManaPotion()
 	manaItem = manaRestoreButton:isChecked()
@@ -163,6 +172,7 @@ function autoManaPotion()
 	end
 end
 
+
 function toggle()
 	if luniaBotWindow:isVisible() then
 		hide()
@@ -171,13 +181,16 @@ function toggle()
 	end
 end
 
+
 local function getDistanceBetween(p1, p2)
     return math.max(math.abs(p1.x - p2.x), math.abs(p1.y - p2.y))
 end
 
+
 function Player.canAttack(self)
     return not self:hasState(16384) and not g_game.isAttacking()
 end
+
 
 function Creature:canReach(creature)
 	--function from candybot
@@ -212,12 +225,13 @@ function Creature:canReach(creature)
 	return false
 end
 
+
 function atkLoop() 
 	if(player:canAttack()) then
 		local pPos = player:getPosition()
 		local luredMob = {}
-		local lureAmount = tonumber(luniaBotWindow.LureMaximum:getText())
-		local lureMinimum =  tonumber(luniaBotWindow.LureMinimum:getText())
+		local lureAmount = tonumber(luniaBotWindow:getChildById("LureMaximum"):getText())
+		local lureMinimum =  tonumber(luniaBotWindow:getChildById("LureMinimum"):getText())
 		local luring = lureButton:isChecked()
 		if pPos then --solves some weird bug, in the first login, the players position is nil in the start for some reason
 			local creatures = g_map.getSpectators(pPos, false)
@@ -250,13 +264,13 @@ function atkLoop()
 	atkLoopId = scheduleEvent(atkLoop, 200)
 end
 
+
 function fag()
 	local label = g_ui.createWidget('Waypoint', waypointList)
 	local pos = player:getPosition()
 	label:setText(pos.x .. "," .. pos.y .. "," .. pos.z)
 	table.insert(waypoints, pos)
 end
-
 
 
 function walkToTarget()
@@ -318,21 +332,21 @@ function walkToTarget()
 end
 
 
-
 function saveWaypoints() 
 	local saveText = '{\n'
 	for _,v in pairs(waypoints) do
 		saveText = saveText .. '{x = '.. v.x ..', y = ' .. v.y .. ', z = ' .. v.z .. '},\n'
 	end
 	saveText = saveText .. '}'
-	local file = io.open('modules/otcbot-master/wpts/'.. luniaBotWindow.WptName:getText() ..'.lua', 'w')
+	local file = io.open(config.waypointDirectory .. luniaBotWindow:getChildById("WptName"):getText() .. ".lua", "w")
 	file:write(saveText)
 	file:close()
 end
 
+
 function loadWaypoints() 
-	local f = io.open('modules/otcbot-master/wpts/'.. luniaBotWindow.WptName:getText() ..'.lua', "rb")
-    local content = f:read("*all")
+	local f = io.open(config.waypointDirectory .. luniaBotWindow:getChildById("WptName"):getText() ..'.lua', "r")
+	local content = f:read("*all")
 	f:close()
 	clearWaypoints()
 	waypoints = loadstring("return "..content)()
@@ -342,6 +356,7 @@ function loadWaypoints()
 	end
 end
 
+
 function clearWaypoints()
 	waypoints = {}
 	autowalkTargetPosition = currentTargetPositionId
@@ -349,6 +364,7 @@ function clearWaypoints()
 	clearLabels()
 	walkButton:setChecked(false)
 end
+
 
 function clearLabels()
 	while waypointList:getChildCount() > 0 do
@@ -361,8 +377,8 @@ end
 function itemHealingLoop()
 	-- Prioritize healing item instead of mana
 	if healingItem then
-		local hpItemPercentage = tonumber(luniaBotWindow.HealItemPercent:getText())
-		local hpItemId = tonumber(luniaBotWindow.HealItem:getText())
+		local hpItemPercentage = tonumber(luniaBotWindow:getChildById("HealItemPercent"):getText())
+		local hpItemId = tonumber(luniaBotWindow:getChildById("HealItem"):getText())
 		if (player:getHealth() <= (player:getMaxHealth() * (hpItemPercentage/100))) then
 			g_game.useInventoryItemWith(hpItemId, player)
 			-- maybe don't try using mana after healing item?
@@ -379,10 +395,9 @@ function itemHealingLoop()
 end
 
 
-
 function healingSpellLoop()
-	local healingSpellPercentage = tonumber(luniaBotWindow.HealthSpellPercent:getText())
-	local healSpell = luniaBotWindow.HealSpellText:getText()
+	local healingSpellPercentage = tonumber(luniaBotWindow:getChildById("HealthSpellPercent"):getText())
+	local healSpell = luniaBotWindow:getChildById("HealSpellText"):getText()
 	if (not player) then
 		spellHealingLoopId = scheduleEvent(healingSpellLoop, 502)
 	end
@@ -392,9 +407,10 @@ function healingSpellLoop()
 	spellHealingLoopId = scheduleEvent(healingSpellLoop, 502)
 end
 
+
 function manaTrainLoop()
-	local manaTrainPercentage = tonumber(luniaBotWindow.ManaTrainPercent:getText())
-	local manaSpell = luniaBotWindow.ManaSpellText:getText()
+	local manaTrainPercentage = tonumber(luniaBotWindow:getChildById("ManaTrainPercent"):getText())
+	local manaSpell = luniaBotWindow:getChildById("ManaSpellText"):getText()
 	if (not player) then
 		manaLoopId = scheduleEvent(manaTrainLoop, 1000)
 	end
@@ -404,8 +420,9 @@ function manaTrainLoop()
 	manaLoopId = scheduleEvent(manaTrainLoop, 1000)
 end
 
+
 function hasteLoop()
-	local hasteSpell = luniaBotWindow.HasteText:getText()
+	local hasteSpell = luniaBotWindow:getChildById("HasteText"):getText()
 	if (not player) then
 		hasteLoopId = scheduleEvent(hasteLoop, 1000)
 	end
@@ -417,8 +434,9 @@ function hasteLoop()
 	hasteLoopId = scheduleEvent(hasteLoop, 1000)
 end
 
+
 function buffLoop()
-	local buffSpell = luniaBotWindow.BuffText:getText()
+	local buffSpell = luniaBotWindow:getChildById("BuffText"):getText()
 	if (not player) then
 		buffLoopId = scheduleEvent(buffLoop, 1000)
 	end
@@ -427,6 +445,7 @@ function buffLoop()
 	end
 	buffLoopId = scheduleEvent(buffLoop, 1000)
 end
+
 
 function shieldLoop()
 	if (not player) then
@@ -438,8 +457,9 @@ function shieldLoop()
 	shieldLoopId = scheduleEvent(shieldLoop, 1000)
 end
 
+
 function atkSpellLoop()
-	local atkSpell = luniaBotWindow.AtkSpellText:getText()
+	local atkSpell = luniaBotWindow:getChildById("AtkSpellText"):getText()
 	if (g_game.isAttacking()) then
 		g_game.talk(atkSpell)
 	end

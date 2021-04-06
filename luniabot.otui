@@ -5,10 +5,10 @@ Waypoint < Label
   id: wpt
 
 BotBox < OptionCheckBox
-  @onCheckChange: modules.game_luniabot.toggleLoop(self:getId())
+  @onCheckChange: modules.otcbot.toggleLoop(self:getId())
 
 NormalBotBox < CheckBox
-  @onCheckChange: modules.game_luniabot.toggleLoop(self:getId())
+  @onCheckChange: modules.otcbot.toggleLoop(self:getId())
   
 MainWindow
   !text: tr('LuniaBot')
@@ -96,7 +96,7 @@ MainWindow
     id: buttonOk
     !text: tr('Add waypoint')
     width: 120
-    @onClick: modules.game_luniabot.fag()
+    @onClick: modules.otcbot.fag()
     anchors.top: waypoints.bottom
     anchors.left: waypoints.left
 
@@ -125,7 +125,7 @@ MainWindow
     id: save
     !text: tr('Save')
     width: 80
-    @onClick: modules.game_luniabot.saveWaypoints()
+    @onClick: modules.otcbot.saveWaypoints()
     !tooltip: tr('Saves your waypoints in the filename above, located inside modules/otcbot-master/wpts.')
     anchors.top: prev.bottom
     anchors.left: prev.left
@@ -134,7 +134,7 @@ MainWindow
     id: load
     !text: tr('Load')
     width: 80
-    @onClick: modules.game_luniabot.loadWaypoints()
+    @onClick: modules.otcbot.loadWaypoints()
     !tooltip: tr('Loads your waypoints from the filename above, located inside modules/otcbot-master/wpts.')
     anchors.top: save.top
     anchors.left: save.right
@@ -143,7 +143,7 @@ MainWindow
     id: clear
     !text: tr('Clear waypoints')
     width: 120
-    @onClick: modules.game_luniabot.clearWaypoints()
+    @onClick: modules.otcbot.clearWaypoints()
     anchors.top: save.bottom
     anchors.left: save.left
 
@@ -444,3 +444,4 @@ MainWindow
     anchors.left: clear.left
     width: 180
     focusable: true
+

@@ -78,10 +78,11 @@ function logIn()
 	player = g_game.getLocalPlayer()
 	print("Logged in as player: "..player:getName())
 
-		--Fixes default values
+	-- Fixes default values
 	if(luniaBotWindow:getChildById("HealItem"):getText()) == ",266" then
 		luniaBotWindow:getChildById("HealItem"):setText('266')
 	end
+	
 	if(luniaBotWindow:getChildById("ManaItem"):getText()) == ",268" then
 		luniaBotWindow:getChildById("ManaItem"):setText('268')
 	end
@@ -94,7 +95,7 @@ function logIn()
 	local textBoxes = {luniaBotWindow.ManaSpellText, luniaBotWindow.HasteText, luniaBotWindow.AtkSpellText, luniaBotWindow.HealSpellText, luniaBotWindow.HealthSpellPercent, luniaBotWindow.HealItem, luniaBotWindow.HealItemPercent, luniaBotWindow.ManaItem, luniaBotWindow.ManaPercent, luniaBotWindow.WptName, luniaBotWindow.BuffText, luniaBotWindow.LureMinimum, luniaBotWindow.LureMaximum}
 	for _,textBox in ipairs(textBoxes) do
 		local storedText = g_settings.get(player:getName() .. " " .. textBox:getId())
-		if (string.len(storedText) >= 1) then
+		if string.len(storedText) >= 1 then
 			textBox:setText(g_settings.get(player:getName() .. " " .. textBox:getId()))
 		end
 	end
@@ -186,12 +187,12 @@ end
 
 
 local function getDistanceBetween(p1, p2)
-    return math.max(math.abs(p1.x - p2.x), math.abs(p1.y - p2.y))
+	return math.max(math.abs(p1.x - p2.x), math.abs(p1.y - p2.y))
 end
 
 
 function Player.canAttack(self)
-    return not self:hasState(16384) and not g_game.isAttacking()
+	return not self:hasState(16384) and not g_game.isAttacking()
 end
 
 
@@ -297,14 +298,9 @@ function walkToTarget()
 		end
 	end
 
-	-- if player:getStepTicksLeft() > 0 then
-	--     buttonEvent['walking']['e'] = scheduleEvent(buttonEvent['walking']['f'], player:getStepTicksLeft())
-    --     return
-	-- end
-
 	if g_game.isAttacking() or isFollowing then
 		buttonEvent['walking']['e'] = scheduleEvent(buttonEvent['walking']['f'], 300)
-        return
+		return
 	end
 
 	if not autowalkTargetPosition then
@@ -316,32 +312,32 @@ function walkToTarget()
 		return
 	end
 
-    -- fast search path on minimap (known tiles)
-    if not player or not buttonEvent['walking']['e'] then print("walking loop cancelled 2") return end
-    steps, result = g_map.findPath(player:getPosition(), autowalkTargetPosition, 5000, 0)
+	-- fast search path on minimap (known tiles)
+	if not player or not buttonEvent['walking']['e'] then print("walking loop cancelled 2") return end
+	steps, result = g_map.findPath(player:getPosition(), autowalkTargetPosition, 5000, 0)
 	
 	if result == PathFindResults.Ok then
-        g_game.walk(steps[1], true)
+		g_game.walk(steps[1], true)
 	elseif result == PathFindResults.Position then
 		currentTargetPositionId = currentTargetPositionId + 1
 		if (currentTargetPositionId > #waypoints) then
 			currentTargetPositionId = 1
 		end
-    else
-        -- slow search path on minimap, if not found, start 'scanning' map
-        if not player then return end
-        steps, result = g_map.findPath(player:getPosition(), autowalkTargetPosition, 25000, 1)
-        if result == PathFindResults.Ok then
-            g_game.walk(steps[1], true)
+	else
+		-- slow search path on minimap, if not found, start 'scanning' map
+		if not player then return end
+		steps, result = g_map.findPath(player:getPosition(), autowalkTargetPosition, 25000, 1)
+		if result == PathFindResults.Ok then
+			g_game.walk(steps[1], true)
 		else
 			-- can't reach?  so skip this waypoint. improve this somehow
 			currentTargetPositionId = currentTargetPositionId + 1
 		end
-    end
-    
-    -- limit steps to 10 per second (100 ms between steps)
-    local nextStep = math.max(100, player:getStepTicksLeft())
-    buttonEvent['walking']['e'] = scheduleEvent(buttonEvent['walking']['f'], nextStep)
+	end
+	
+	-- limit steps to 10 per second (100 ms between steps)
+	local nextStep = math.max(100, player:getStepTicksLeft())
+	buttonEvent['walking']['e'] = scheduleEvent(buttonEvent['walking']['f'], nextStep)
 end
 
 
@@ -471,11 +467,11 @@ function shieldLoop()
 	buttonEvent['AutoManaShield']['e'] = scheduleEvent(buttonEvent['AutoManaShield']['f'], 1000)
 end
 
+
 function antiIdleTurnPlayer()
 	if not player or not player:getPosition() then return end
 	g_game.turn((player:getDirection() + 2) % 4)
 end
-
 function antiIdleLoop()
 	if not player or not buttonEvent['AntiIdle']['e'] then print("AntiIdle loop cancelled") return end
 
@@ -487,6 +483,7 @@ function antiIdleLoop()
 	buttonEvent['AntiIdle']['e'] = scheduleEvent(buttonEvent['AntiIdle']['f'], nextLoop)
 end
 
+
 function atkSpellLoop()
 	if not player or not buttonEvent['AtkSpell']['e'] then print("AtkSpell loop cancelled") return end
 
@@ -497,4 +494,3 @@ function atkSpellLoop()
 
 	buttonEvent['AtkSpell']['e'] = scheduleEvent(buttonEvent['AtkSpell']['f'], 502)
 end
-

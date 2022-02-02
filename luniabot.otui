@@ -12,7 +12,7 @@ NormalBotBox < CheckBox
   
 MainWindow
   !text: tr('LuniaBot')
-  size: 210 700
+  size: 220 730
   @onEscape: self:hide()
 
   Label
@@ -259,6 +259,7 @@ MainWindow
     anchors.left: HealItemPercent.right
     anchors.top: HealthItemLabel.bottom
     margin-top: 2
+
   HorizontalSeparator
     anchors.left: parent.left
     anchors.right: parent.right
@@ -294,7 +295,7 @@ MainWindow
 
   Label
     id: ManaItemLabel
-    !text: tr('Under Mana:')
+    !text: tr('Under MP:')
     anchors.right: parent.right
     anchors.top: ManaItemLabel.top
     margin-left: 18
@@ -366,11 +367,11 @@ MainWindow
 
   Label
     id: Percent
-    !text: tr('Above')
+    !text: tr('Over')
     anchors.left: prev.right
     anchors.top: prev.top
     margin-top: 2
-    margin-left: 5
+    margin-left: 18
 
 
   TextEdit
@@ -440,6 +441,22 @@ MainWindow
     id: AutoManaShield
     !text: tr('Auto mana shield')
     !tooltip: tr('Automatically cast utamo vita when you dont have magic shield')
+    anchors.top: prev.bottom
+    anchors.left: clear.left
+    width: 180
+    focusable: true
+
+  HorizontalSeparator
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: prev.bottom
+    margin-top: 8
+    margin-bot: 8
+
+  NormalBotBox
+    id: AntiIdle
+    !text: tr('Anti Idle')
+    !tooltip: tr('Automatically change direction once in a while to stay logged in while training.')
     anchors.top: prev.bottom
     anchors.left: clear.left
     width: 180
